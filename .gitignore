@@ -1,3 +1,4 @@
+# Python
 venv/
 venv_new/
 __pycache__/
@@ -13,19 +14,31 @@ node_modules/
 .next/
 out/
 build/
+dist/
 
-# Large files & Logs
+# Databases & Logs
+security_logs.db
 firewall_logs.txt
 reports.json
+*.log
+
+# Sensitive Files
+firebase_service_account.json
+secret_key.py
+*.json
+!vercel.json
+!package.json
+
+# Dataset & GeoIP (Large files)
 GeoLite2-City.mmdb
 GeoLite2-City_20250603/
-*.log
+NSL-KDD/
+KDDTrain+.txt
+KDDTest+.txt
+*.csv
 *.zip
 *.tar.gz
 *.rar
-
-# Model artifacts (if they are too big for GitHub > 100MB, otherwise fine)
-# ids_model.pkl  (it is 7MB, so it is fine to keep)
 
 # OS generated
 .DS_Store

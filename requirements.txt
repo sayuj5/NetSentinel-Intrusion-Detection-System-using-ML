@@ -1,9 +1,12 @@
-This file lists the Python libraries project depends on.
-
-# Python Libraries
 scapy
 Flask
 Flask-SocketIO
 scikit-learn
 pandas
 numpy
+joblib
+requests
+gevent
+gevent-websocket
+python-dotenv
+pefile

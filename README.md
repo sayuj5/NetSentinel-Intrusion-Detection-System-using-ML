@@ -1,45 +1,46 @@
-# 🛡️ NetSentinel: Cybernetic Intrusion Detection System (IDS)
+# 🛡️ NetSentinel: Professional Cyber-Defense Engine
 
-An advanced Machine Learning-driven Network Defense Engine, featuring a real-time predictive backend and a high-performance, responsive Next.js frontend dashboard. 
+NetSentinel is a state-of-the-art, **Serverless Hybrid Intrusion Detection System (IDS)** designed for real-time network monitoring and AI-driven threat analysis. Combining the power of a Windows-native scanning engine with a high-fidelity Next.js Cloud Dashboard, NetSentinel provides an enterprise-grade security experience.
 
-## 🌐 Complete System Architecture
+## 🚀 Key Features
+- **AI-Powered Detection**: Real-time packet inspection using the NSL-KDD optimized Random Forest model.
+- **Serverless Hybrid Architecture**: Dashboard and Relay hosted on Vercel for global accessibility.
+- **Windows Sentinel Node**: Lightweight local monitoring node optimized for Npcap performance.
+- **AI Malware Lab**: Static heuristic scanning for suspicious binaries with AI threat scoring.
+- **Glassmorphism UI**: High-fidelity dashboard with real-time threat velocity visualizations.
 
-NetSentinel leverages a fast Python-based backend that actively sniffs packets and utilizes an ML model to detect anomalies. The events are streamed instantly to a visually striking, glassmorphic Next.js Dashboard.
+## 🏗️ Technical Architecture
+NetSentinel operates on a **Distributed Streaming Model**:
+1. **Sentinel Node (Local Windows)**: Sniffs raw packets, performs local AI inference, and pushes events to the cloud.
+2. **Cloud Relay (Vercel Serverless)**: A Flask-based relay station that broadcasts security events via WebSockets.
+3. **Command Center (Next.js)**: A premium React-based interface for live monitoring and malware analysis.
 
-### Backend (Python)
-- `app.py`: The Main Server relaying real-time stats and events over Socket.IO.
-- `prediction_api.py`: The ML Inference Engine processing packet data.
-- `realtime_sniffer.py`: The core packet capturing service utilizing Scapy for active listening on Windows/Linux environments.
+## 👥 Contributors & Roles
 
-### Frontend (Next.js)
-- A modern `Next.js 14` + `Tailwind CSS v4` dashboard.
-- Uses `socket.io-client` for persistent real-time streaming.
-- Fully responsive styling containing advanced glassmorphism and animated components to track detected attacks instantaneously.
+| Name | Role | Responsibility |
+| :--- | :--- | :--- |
+| **Sayuj Sur** | **Team Leader & Lead Architect** | Overall system design, Hybrid Cloud strategy, and project orchestration. |
+| **Mabud Munshi** | **Backend & API Specialist** | Development of the Serverless Relay, Socket.io integration, and Cloud connectivity. |
+| **Ujjwal Kumar Mishra** | **ML & Security Researcher** | AI Model pipeline, feature engineering, and Malware Analysis heuristic logic. |
+| **Md Mehtab Baidya** | **Frontend & UI Developer** | Design and development of the glassmorphic Dashboard and real-time visualizations. |
 
-## 🚀 Environment Setup
+## 🛠️ Quick Start
 
-### 1. The Machine Learning Engine & Backend
-First, ensure your Python environment is set up. From the root directory:
-```bash
+### 1. Cloud Deployment
+Push this repository to **GitHub** and connect it to **Vercel**. The dashboard will be live instantly.
+
+### 2. Local Setup (Windows)
+```powershell
+# Install requirements
 pip install -r requirements.txt
-```
 
-Launch the detection APIs across three terminals to bring the backend online:
-```bash
-python app.py
+# Start the Local AI Engine
 python prediction_api.py
-python realtime_sniffer.py
+
+# Start the Windows Sentinel (Stream to Vercel)
+$env:VERCEL_API_URL="https://your-vercel-app.vercel.app/api/realtime_data"
+python engine/sniffer.py
 ```
 
-### 2. The Next.js Interface
-Switch to the built-in React UI dashboard folder and run the developer server.
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Navigate to `http://localhost:3000` to review real-time security events!
-
-## 🔐 Licensing
-This software encompasses the MIT License terms. See `LICENSE.md` for copyright terms.
+## 🔐 License
+This project is licensed under the MIT License. Developed for educational and security research purposes.
