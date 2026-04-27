@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - SNIFFER - %(leveln
 # --- Configuration for Flask API Endpoints ---
 # IMPORTANT: Use the IP and port of your new prediction API
 PREDICTION_API_URL = "http://127.0.0.1:5001/predict" # New prediction API endpoint
-DASHBOARD_API_URL = "http://127.0.0.1:5055/realtime_data" # Updated Port
+DASHBOARD_API_URL = "https://netsentinel-relay.onrender.com/api/realtime_data"
 # FLASK_SESSION_END_URL = "http://127.0.0.1:5000/session_end" # Keep if session management is still needed
 
 SESSION_ID = str(uuid.uuid4())

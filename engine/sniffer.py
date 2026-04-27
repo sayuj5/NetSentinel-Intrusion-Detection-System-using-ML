@@ -9,7 +9,8 @@ class WindowsSecurityEngine:
     def __init__(self, prediction_url="http://127.0.0.1:5001/predict", dashboard_url=None):
         self.prediction_url = prediction_url
         # Use Vercel URL if provided in environment, otherwise local
-        self.dashboard_url = dashboard_url or os.getenv("VERCEL_API_URL", "http://127.0.0.1:5055/realtime_data")
+        # Use Cloud URL if provided in environment, otherwise use Render Relay
+        self.dashboard_url = dashboard_url or os.getenv("VERCEL_API_URL", "https://netsentinel-relay.onrender.com/api/realtime_data")
         self.active = False
         
         try:

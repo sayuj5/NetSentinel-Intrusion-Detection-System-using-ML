@@ -28,10 +28,8 @@ export default function Home() {
   const [scanning, setScanning] = useState(false);
 
   useEffect(() => {
-    // Connect to the same origin if deployed, otherwise use localhost backend
-    const socketUrl = typeof window !== "undefined" && window.location.hostname !== "localhost" 
-      ? window.location.origin 
-      : "http://127.0.0.1:5055";
+    // Connect to the Render backend for the real-time stream
+    const socketUrl = "https://netsentinel-relay.onrender.com";
     const socket = io(socketUrl);
 
     socket.on("connect", () => {
