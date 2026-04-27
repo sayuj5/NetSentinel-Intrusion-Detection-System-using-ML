@@ -155,7 +155,27 @@ def packet_callback(packet):
     except Exception as e:
         logging.error(f"Error sending data to Prediction API: {e}", exc_info=True)
 
-# --- Sniffing Control ---
+# --- Sniffing Control & Remote Command Polling ---
+COMMAND_API_URL = "https://netsentinel-relay.onrender.com/api/command"
+
+def command_poller():
+    global sniffing_active
+    logging.info("Remote command poller started.")
+    while True:
+        try:
+            response = requests.get(COMMAND_API_URL, timeout=5)
+            if response.status_code == 200:
+                cmd = response.json().get("command", "STOP")
+                if cmd == "START" and not sniffing_active:
+                    logging.info(">>> REMOTE SIGNAL: STARTING SENTINEL ENGINE")
+                    sniffing_active = True
+                elif cmd == "STOP" and sniffing_active:
+                    logging.info(">>> REMOTE SIGNAL: STOPPING SENTINEL ENGINE")
+                    sniffing_active = False
+        except Exception as e:
+            logging.error(f"Command poller error: {e}")
+        time.sleep(3)
+
 def stop_sniffing():
     global sniffing_active
     sniffing_active = False
@@ -163,33 +183,29 @@ def stop_sniffing():
 
 # --- Main Sniffer Execution ---
 if __name__ == '__main__':
-    NETWORK_INTERFACE = os.getenv('NETWORK_INTERFACE', 'Ethernet') # Default for Windows, adjust for Linux/macOS
-    if platform.system() == "Linux":
-        NETWORK_INTERFACE = os.getenv('NETWORK_INTERFACE', 'eth0') # Common Linux interface
-    elif platform.system() == "Darwin": # macOS
-        NETWORK_INTERFACE = os.getenv('NETWORK_INTERFACE', 'en0') # Common macOS interface
+    NETWORK_INTERFACE = os.getenv('NETWORK_INTERFACE', 'Ethernet')
+    
+    # Start the command poller thread
+    poller_thread = threading.Thread(target=command_poller, daemon=True)
+    poller_thread.start()
 
-    print(f"\nNetSentinel will attempt to sniff on interface: '{NETWORK_INTERFACE}'.") #
-    print("For full internal/external detection, ensure proper network setup (e.g., SPAN port) and privileges.") #
+    logging.info(f"NetSentinel Node Active on '{NETWORK_INTERFACE}'. Awaiting Cloud Signal...")
 
+    # Start the sniffing engine in daemon thread
     sniff_thread = threading.Thread(target=sniff, kwargs={
         'prn': packet_callback,
         'store': 0,
         'iface': NETWORK_INTERFACE,
         'promisc': True
-    }) #
-    sniff_thread.daemon = True
-    sniff_thread.start() #
+    }, daemon=True)
+    sniff_thread.start()
 
     try:
-        while sniffing_active:
+        while True:
             time.sleep(1)
     except KeyboardInterrupt:
         stop_sniffing()
     except Exception as e:
-        logging.error(f"An unexpected error occurred in the main sniffer loop: {e}", exc_info=True)
-        stop_sniffing()
+        logging.error(f"An unexpected error occurred in the main sniffer loop: {e}")
     finally:
-        if sniff_thread.is_alive():
-            logging.info("Waiting for sniffing thread to terminate...")
-            sniff_thread.join(timeout=2)
+        logging.info("Sentinel Node shutting down.")

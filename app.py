@@ -14,8 +14,37 @@ app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "cyber-vault-secret-key")
 # Enable CORS for cross-origin streaming
 CORS(app)
 
+# Global state for remote control
+sentinel_command = "STOP" 
+
+# Base64 Confusion Matrix (Extracted from your local training)
+CONF_MATRIX_IMG = ""
+try:
+    with open('confusion_matrix.txt', 'r') as f:
+        CONF_MATRIX_IMG = f.read()
+except:
+    pass
+
 # Use memory-efficient WebSocket management
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent')
+
+@app.route('/api/model_info', methods=['GET'])
+def get_model_info():
+    return jsonify({
+        "accuracy": "99.82%",
+        "precision": "99.75%",
+        "recall": "99.90%",
+        "confusion_matrix": CONF_MATRIX_IMG
+    })
+
+@app.route('/api/command', methods=['GET', 'POST'])
+def handle_command():
+    global sentinel_command
+    if request.method == 'POST':
+        sentinel_command = request.json.get('command', 'STOP')
+        logging.info(f"Command received: {sentinel_command}")
+        return jsonify({"status": "command_updated", "current": sentinel_command})
+    return jsonify({"command": sentinel_command})
 
 @app.route('/api/realtime_data', methods=['POST'])
 @app.route('/realtime_data', methods=['POST'])
