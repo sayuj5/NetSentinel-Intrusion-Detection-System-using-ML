@@ -1,6 +1,8 @@
 scapy
 Flask
 Flask-SocketIO
+Flask-Cors
+gunicorn
 scikit-learn
 pandas
 numpy

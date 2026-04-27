@@ -28,7 +28,11 @@ export default function Home() {
   const [scanning, setScanning] = useState(false);
 
   useEffect(() => {
-    const socket = io("http://127.0.0.1:5055");
+    // Connect to the same origin if deployed, otherwise use localhost backend
+    const socketUrl = typeof window !== "undefined" && window.location.hostname !== "localhost" 
+      ? window.location.origin 
+      : "http://127.0.0.1:5055";
+    const socket = io(socketUrl);
 
     socket.on("connect", () => {
       setConnected(true);
@@ -88,9 +92,10 @@ export default function Home() {
       {/* HEADER */}
       <header className="relative z-10 flex items-center justify-between px-10 py-8 border-b border-white/5 bg-black/20 backdrop-blur-xl">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20 shadow-[0_0_20px_rgba(6,182,212,0.1)]">
-            <Shield className="text-cyan-400" size={32} />
+          <div className="p-1 bg-cyan-500/10 rounded-xl border border-cyan-500/20 shadow-[0_0_20px_rgba(6,182,212,0.1)] overflow-hidden">
+            <img src="/logo.png" alt="NetSentinel Logo" className="w-12 h-12 object-cover" />
           </div>
+
           <div>
             <h1 className="text-3xl font-bold tracking-tighter text-white">
               NET<span className="text-cyan-400">SENTINEL</span>
